@@ -1,12 +1,14 @@
 import numpy as np
 import math
-
+import os
 class Ensembles:
     def __init__(self):
-        self.time = np.genfromtxt('samples/t.csv', delimiter=',')
+        
+        print(os.getcwd(),"\n\n\n")
+        self.time = np.genfromtxt('t.csv', delimiter=',')
         timeLength = len(self.time)
         ## X
-        self.ensembleX = np.genfromtxt('samples/x.csv', delimiter=',')
+        self.ensembleX = np.genfromtxt('x.csv', delimiter=',')
         
         ## Y
         SAMPLES_NUM = 100
@@ -41,7 +43,3 @@ class Ensembles:
         else:
             print("letter not found")
 
-
-
-ens = Ensembles()
-ens.getEnsemble('x');
