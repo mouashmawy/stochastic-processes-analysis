@@ -1,27 +1,31 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-
 class Ensembles:
     def __init__(self):
-        self.time = np.genfromtxt('t.csv', delimiter=',')
+        self.time = np.genfromtxt('samples/t.csv', delimiter=',')
         timeLength = len(self.time)
         ## X
-        self.ensembleX = np.genfromtxt('x.csv', delimiter=',')
+        self.ensembleX = np.genfromtxt('samples/x.csv', delimiter=',')
         
         ## Y
-        SAMPLES_NUM = 1000
+        SAMPLES_NUM = 100
         PI = math.pi
         self.ensembleY = np.zeros(shape=(SAMPLES_NUM,timeLength))
-        betas = np.array(list(range(SAMPLES_NUM+1)))/SAMPLES_NUM
-        for beta in betas:
-            for t in self.time:
-                self.ensembleY[t][beta] = beta*math.sin(2*PI*t)
+        betas = np.array(list(range(SAMPLES_NUM)))/SAMPLES_NUM
+        for b in range(len(betas)):
+            for t in range(len(self.time)):
+                self.ensembleY[b][t] = betas[b]*math.sin(2*PI*self.time[t])
+        
+        ## Z
+        self.ensembleZ = self.ensembleX * self.ensembleY
                 
         
-    def getX(self):
-        return self.ensembleX, self.time
-        
+    def getEnsemble(self, ensemble="x"):
+        if ensemble=="x":   
+            return self.ensembleX, self.time
+        elif ensemble=="y":
+            return self.ensembleY, self.time
      
 
 
@@ -33,8 +37,12 @@ class Stat:
         
         
     def plotMsamples(self,number):
-        for process in self.processes:
-            plt.plot(self.time,process)
+        for n in range(len(self.processes)):
+            plt.plot(self.time,self.processes[n])
+        plt.show()
+        
+    def plotSampleN(self,number):
+        plt.plot(self.time,self.processes[number])
         plt.show()
     
     def plotEnsembleMean(self):
@@ -60,9 +68,9 @@ class Stat:
     
 def main():
     ens = Ensembles()
-    x,t = ens.getXandT()
-    plot = Stat(x,t)
-    plot.plotEnsembleMean()
+    ensemble,time = ens.getEnsemble("y")
+    plot = Stat(ensemble,time)
+    plot.plotSampleN(50)
     
     
 if __name__ == "__main__":
