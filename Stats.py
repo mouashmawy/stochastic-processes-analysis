@@ -31,9 +31,3 @@ class Stats:
         mean = np.mean(self.processes[n])
         return mean
         
-    def test(self):
-        p.genfromtxt('t.csv', delimiter=',')
-        
-        pass
-    
-    
