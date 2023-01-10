@@ -1,29 +1,34 @@
 import numpy as np
-import math
-import os
+from math import pi, e, pow, sqrt,sin
+
 class Ensembles:
     def __init__(self):
         
-        print(os.getcwd(),"\n\n\n")
-        self.time = np.genfromtxt('t.csv', delimiter=',')
+        self.time = np.genfromtxt('samples/t.csv', delimiter=',')
         timeLength = len(self.time)
         ## X
-        self.ensembleX = np.genfromtxt('x.csv', delimiter=',')
+        self.ensembleX = np.genfromtxt('samples/x.csv', delimiter=',')
         
         ## Y
         SAMPLES_NUM = 100
-        PI = math.pi
+        Y_mean = 0
+        Y_var = 1
         self.ensembleY = np.zeros(shape=(SAMPLES_NUM,timeLength))
-        betas = np.array(list(range(SAMPLES_NUM)))/SAMPLES_NUM
-        for b in range(len(betas)):
+        betas = np.array(list(range(SAMPLES_NUM)))
+        
+        for x in range(len(betas)):
             for t in range(len(self.time)):
-                self.ensembleY[b][t] = betas[b]*math.sin(2*PI*self.time[t])
+                beta = 1/sqrt(2*pi*Y_var) * pow(e,(-pow(x-Y_mean,2)/(2*Y_var)))
+                
+                self.ensembleY[x][t] = beta*sin(2*pi*self.time[t])
         
         ## Z
         self.ensembleZ = self.ensembleX * self.ensembleY
-         ## P
+        
+        ## P
         self.ensembleP = self.ensembleX * self.ensembleY
-         ## M
+        
+        ## M
         self.ensembleM = self.ensembleX * self.ensembleY
                 
 
