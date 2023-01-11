@@ -1,11 +1,12 @@
 import numpy as np
 from math import pi, e, pow, sqrt,sin
-
+from DEF import *
 class Ensembles:
-    def __init__(self):
+    def __init__(self, choiceOrFile):
         
         self.time = np.genfromtxt('samples/t.csv', delimiter=',')
         timeLength = len(self.time)
+        
         ## X
         self.ensembleX = np.genfromtxt('samples/x.csv', delimiter=',')
         
@@ -30,6 +31,13 @@ class Ensembles:
         
         ## M
         self.ensembleM = self.ensembleX * self.ensembleY
+        
+        ## file
+        if not choiceOrFile in [X_,Y_,Z_,P_,M_]:
+            try:
+                self.ensembleX = np.genfromtxt(choiceOrFile, delimiter=',')
+            except:
+                print("file not found")
                 
 
     def getEnsemble(self, ensemble="x"):
