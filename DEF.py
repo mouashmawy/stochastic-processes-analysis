@@ -1,10 +1,16 @@
-#GLOBAL VARS
+#Global used Colors for GUI
 BK_CLR = "#000000"
 FG_CLR = "#FFFFFF"
 DSBLD_CLR = "#AAAAAA"
 
-X_ ="x"
-Y_ = "y"
-Z_ = "z"
-P_ = "p"
-M_ = "m"
+#Menu options for Ensembles
+X_ ="Ensemble x"
+Y_ = "Ensemble y"
+Z_ = "Ensemble z"
+P_ = "Ensemble p"
+M_ = "Ensemble m"
+Choose_ = "Choose File.."
+
+
+OPTIONS_MENU_LENGTH = 150
+BTN_WIDTH = 15
