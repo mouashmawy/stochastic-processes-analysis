@@ -4,8 +4,9 @@ from DEF import *
 def main():
     ens = Ensembles()
     ensemble,time = ens.getEnsemble(X_)
-    plot = Stats(ensemble,time)
-    print(plot.calcACFbetween(9,69))
+    Statistics = Stats(ensemble,time)
+    #print(Statistics.calcACFbetween(0,0))
+    print(len(Statistics.plotPSD()))
     
     
 if __name__ == "__main__":

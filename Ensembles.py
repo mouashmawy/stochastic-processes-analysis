@@ -20,8 +20,10 @@ class Ensembles:
         for x in range(len(betas)):
             for t in range(len(self.time)):
                 beta = 1/sqrt(2*pi*Y_var) * pow(e,(-pow(x-Y_mean,2)/(2*Y_var)))
-                
-                self.ensembleY[x][t] = beta*sin(2*pi*self.time[t])
+                if t <=2:    
+                    self.ensembleY[x][t] = beta*sin(2*pi*self.time[t])
+                else:
+                    self.ensembleY[x][t] = 0
         
         ## Z
         self.ensembleZ = self.ensembleX * self.ensembleY

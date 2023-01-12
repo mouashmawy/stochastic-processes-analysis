@@ -13,12 +13,13 @@ class GUIApp:
         self.master.minsize(500, 400)
         
         self.ensemble = None
+        self.processes = None
         self.time = None
+        self.statsApp =None
 
         self.additionalWindow1 = None
         self.fileNameText = None
         self.highestNumText = None
-        self.statsApp = None
         ##########frame 1
         self.frame1 = tk.Frame(self.master,bg=BK_CLR, padx=50,pady=20)
         self.welcome = Label(self.frame1, text="Welcome in SP App", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
@@ -41,22 +42,22 @@ class GUIApp:
         self.frame2 = tk.Frame(self.master,bg=BK_CLR, padx=10,pady=10)
         
         self.scaleMLabel = Label(self.frame2, text="M samples", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
-        self.ScaleM = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
+        self.scaleM = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
 
         self.scaleNLabel = Label(self.frame2, text="Process N", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
-        self.ScaleN = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
+        self.scaleN = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
 
         self.scaleILabel = Label(self.frame2, text="ith column", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
-        self.ScaleI = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
+        self.scaleI = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
 
         self.scaleJLabel = Label(self.frame2, text="jth column", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
-        self.ScaleJ = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
+        self.scaleJ = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
 
         
         self.scaleMLabel.grid(row=0, column=0)
         self.ScaleM.grid(row=1,column=0)
         self.scaleNLabel.grid(row=0, column=1)
-        self.ScaleN.grid(row=1,column=1)
+        self.scaleN.grid(row=1,column=1)
         self.scaleILabel.grid(row=2, column=0)
         self.ScaleI.grid(row=3,column=0)
         self.scaleJLabel.grid(row=2, column=1)
@@ -72,24 +73,34 @@ class GUIApp:
         ##########frame 4
         self.frame4 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=10)
 
-        self.freqButton = Button(self.frame4, text='Freq graph', command=self.showFreqGraph, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.numHighestButton = Button(self.frame4, text='Most Freq', command=self.showHighestFreq, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.PMFButton = Button(self.frame4, text='show PMF', command=self.showPMF, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.CDFButton = Button(self.frame4, text='show CDF', command=self.showCDF, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.someStatsButton = Button(self.frame4, text='some stats', command=self.showStats, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.exitButton = Button(self.frame4, text='Clear All...', command=self.clearAll, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-
-        self.freqButton.grid(row=0,column=0)
-        self.numHighestButton.grid(row=0,column=1)
-        self.PMFButton.grid(row=1,column=0)
-        self.CDFButton.grid(row=1,column=1)
-        self.someStatsButton.grid(row=2, column=0)
-        self.exitButton.grid(row=2, column=1)
+        self.plotSampleN_btn = Button(self.frame4, text='Plot Sample N', command=self.plotSampleN, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.PlotMsamples_btn = Button(self.frame4, text='Plot M Samples', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotMean_btn = Button(self.frame4, text='Plot Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotACF_btn = Button(self.frame4, text='Plot ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcTimeMean_btn = Button(self.frame4, text='Calc Time Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcTimeACF_btn = Button(self.frame4, text='Calc Time ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcAllMean_btn = Button(self.frame4, text='Calc All Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plot3DACF_btn = Button(self.frame4, text='Plot 3D ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotPSD_btn = Button(self.frame4, text='Plot PSD', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotPwrAvg_btn = Button(self.frame4, text='show Avg Pwr', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        
+        
+        self.plotSampleN_btn.grid(row=0,column=0)
+        self.PlotMsamples_btn.grid(row=0,column=1)
+        self.plotMean_btn.grid(row=1,column=0)
+        self.plotACF_btn.grid(row=1,column=1)
+        self.calcTimeMean_btn.grid(row=2, column=0)
+        self.calcTimeACF_btn.grid(row=2, column=1)
+        self.calcAllMean_btn.grid(row=3,column=0)
+        self.plot3DACF_btn.grid(row=3,column=1)
+        self.plotPSD_btn.grid(row=4,column=0)
+        self.plotPwrAvg_btn.grid(row=4,column=1)
+        
 
         ##########frame 5
         self.frame5 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=0)
-        self.welcome = Label(self.frame5, text="", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
-        self.welcome.grid(row=0, column=0)
+        self.result = Label(self.frame5, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
+        self.result.grid(row=0, column=0)
 
 
         #frames
@@ -104,6 +115,7 @@ class GUIApp:
         if(choice==Choose_):
             fileName= filedialog.askopenfilename()
             return fileName
+    
     
     def clearAll(self):
         if self.additionalWindow1 != None:
@@ -121,61 +133,16 @@ class GUIApp:
             self.fileNameText = self.openDiag(choice)
             self.ensemble = Ensembles(self.fileNameText)
 
-        self.ensemble  = Ensembles(choice)
+        self.ensemble  = Ensembles()
         
-        ensemble,time = self.ensemble.getEnsemble()
+        self.processes, self.time = self.ensemble.getEnsemble(choice)
         
-        # self.highestNumText =self.MScale.get()
-        # self.statsApp = Stats(ensemble,time)
-        # self.statsApp.calc()
-        # self.processingLabel.config(text=f"processing {self.fileNameText} file with {self.highestNumText} most frequent...",font="Arial 12 bold")
+        self.statsApp = Stats(self.processes, self.time)
 
-
-    def showFreqGraph(self):
-        if (self.validate()):
-            return
-        self.statsApp.freqPlot()
-
-
-
-    def showPMF(self):
-        if (self.validate()):
-            return
-        self.statsApp.PMF()
-
-
-    def showCDF(self):
-        if (self.validate()):
-            return
-        self.statsApp.CDF()
-
-    def showHighestFreq(self):
-        if(self.validate()):
-            return
-
-        self.additionalWindow1 = tk.Toplevel(self.master,bg=BK_CLR)
-        HighestLabel = Label(self.additionalWindow1, text=f"{self.highestNumText} most frequent letters", font='Arial 18 bold', bg=BK_CLR, fg=FG_CLR,pady=20,padx=20)
-        HighestLabel.pack()
-
-
-        listOfHighest = self.statsApp.getHighestList()
-        self.createTable(self.additionalWindow1,listOfHighest).pack()
-
-    def showStats(self):
-        if (self.validate()):
-            return
-
-        self.additionalWindow1 = tk.Toplevel(self.master,bg=BK_CLR)
-        self.additionalWindow1.minsize(400, 250)
-
-        self.statsLabel = Label(self.additionalWindow1, text="Some Statistics", font='Arial 18 bold', bg=BK_CLR, fg=FG_CLR,pady=20)
-
-        list = self.statsApp.getStatistics()
-        tableFrame = self.createTable(self.additionalWindow1, list)
-
-        self.statsLabel.pack()
-        tableFrame.pack()
-
+    def plotSampleN(self):
+        self.validate()
+        self.statsApp.plotSampleN(self.scaleN.get())
+    
 
     def validate(self):
         try:
@@ -200,6 +167,9 @@ class GUIApp:
                 e.insert(tk.END, list[i][j])
                 e.config(state=tk.DISABLED)
         return table
+    
+    def ps(self):
+        pass
 
 root = tk.Tk()
 GUIApp(root)
