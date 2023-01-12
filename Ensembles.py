@@ -2,7 +2,7 @@ import numpy as np
 from math import pi, e, pow, sqrt,sin
 from DEF import *
 class Ensembles:
-    def __init__(self, choiceOrFile):
+    def __init__(self):
         
         self.time = np.genfromtxt('samples/t.csv', delimiter=',')
         timeLength = len(self.time)
@@ -32,27 +32,25 @@ class Ensembles:
         ## M
         self.ensembleM = self.ensembleX * self.ensembleY
         
-        ## file
-        if not choiceOrFile in [X_,Y_,Z_,P_,M_]:
-            try:
-                self.ensembleX = np.genfromtxt(choiceOrFile, delimiter=',')
-            except:
-                print("file not found")
+        # ## file
+        # if not choiceOrFile in [X_,Y_,Z_,P_,M_]:
+        #     try:
+        #         self.ensembleX = np.genfromtxt(choiceOrFile, delimiter=',')
+        #     except:
+        #         print("file not found")
                 
 
-    def getEnsemble(self, ensemble="x"):
-        ensemble=ensemble.lower()
-        if ensemble=="x":   
+    def getEnsemble(self, wantEns):
+        
+        if wantEns == X_:
             return self.ensembleX, self.time
-        elif ensemble=="y":
+        elif wantEns == Y_:
             return self.ensembleY, self.time
-        elif ensemble=="z":
+        elif wantEns == Z_:
             return self.ensembleZ, self.time
-        elif ensemble=="m":
+        elif wantEns == P_:
             return self.ensembleP, self.time
-        elif ensemble=="p":
+        elif wantEns == M_:
             return self.ensembleM, self.time
         
-        else:
-            print("letter not found")
-
+        

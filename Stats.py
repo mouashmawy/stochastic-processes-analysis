@@ -8,10 +8,11 @@ class Stats:
         self.time = time
         self.lenP = len(self.processes)        
         self.lenT = len(self.time) 
+        self.dt = self.time[1]-self.time[0]
                
-    def plotMsamples(self,number):
-        for n in range(number):
-            plt.plot(self.time,self.processes[n])
+    def Plot_n_samples(self,n):
+        for i in range(self.lenP):
+            plt.plot(self.time,self.processes[i])
         plt.show()
     
     def plotSampleN(self,number):
@@ -22,20 +23,28 @@ class Stats:
         EnsembleMean = np.mean(self.processes,axis=0)
         plt.plot(self.time,EnsembleMean)
         print(len(EnsembleMean))
+        print(len(EnsembleMean))
         print(len(self.time))
         plt.show()
         
-    def plotACFbetween(self, ith, jth):
+    def calcMeanAll(self):
+        return np.mean(self.processes)
+        
+    def calcACFbetween(self, ith, jth):
         I = self.processes[:self.lenP, ith]
         J = self.processes[:self.lenP, jth]
         return sum(I*J)/self.lenP
     
-    def calcMeanOf(self,n):
-        mean = np.mean(self.processes[n])
-        return mean
+    def calcTimeMeanOf(self,n):
+        return np.mean(self.processes[n])
     
-    def calcTimeACF(self):
-        pass
+    def calcTimeACFOf(self,n,i,j):
+        tau = abs(j-i)
+        process1 = self.processes[n][:-tau]
+        process2 = self.processes[n][tau:]
+        return sum(process1*process2)*self.dt
+        
+    
     
     def plotPSD(self):
         pass 
