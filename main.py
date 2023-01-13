@@ -1,5 +1,3 @@
-from Ensembles import Ensembles
-from DEF import *
 import tkinter as tk
 from gui import GUIApp
 
