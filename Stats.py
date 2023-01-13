@@ -3,10 +3,14 @@ from matplotlib import cm
 import numpy as np
 from numpy import fft
 import random
+import math
 
 
 class Stats:
-    def __init__(self,ensemble,time):
+    def __init__(self,ensemble,time, outputFigure):
+        
+        self.outputFigure = outputFigure
+        
         self.processes = ensemble
         self.time = time
         self.lenP = len(self.processes)        
@@ -14,36 +18,44 @@ class Stats:
         self.dt = self.time[1]-self.time[0]
         self.ACF_All = np.zeros((self.lenP,self.lenP))
 
-        for i in range(self.lenP):
-            for j in range(self.lenP):
+        for i in range(self.lenT):
+            for j in range(self.lenT):
                 ACF = self.calcACFbetween(i,j)
                 self.ACF_All[i][j] = ACF
         
                
     def plotMSamples(self,m):
         rands = random.sample(range(1, self.lenP), m)
-        for i in rands:
-            plt.plot(self.time,self.processes[i])
-        plt.show()
+        
+        
+        row = math.ceil(math.sqrt(m))
+        coulmn = math.floor(math.sqrt(m))
+        
+        if row*coulmn < m:
+            coulmn += 1
+        
+        for i in range(len(rands)):
+            plot = self.outputFigure.add_subplot(row,coulmn,i+1)
+            plot.plot(self.time,self.processes[rands[i]])
+            # plotting the graph
     
     def plotSampleN(self,number):
-        plt.plot(self.time,self.processes[number])
-        plt.show()
+        plot = self.outputFigure.add_subplot(111)
+        plot.plot(self.time,self.processes[number])
+        
     
     def plotEnsembleMean(self):
         EnsembleMean = np.mean(self.processes,axis=0)
-        plt.plot(self.time,EnsembleMean)
-        plt.show()
+        plot = self.outputFigure.add_subplot(111)
+        plot.plot(self.time,EnsembleMean)
         
     
     def plot3DACF(self):
         
         x = np.arange(0,self.lenP,1)
         X,Y = np.meshgrid(x,x)
-        fig = plt.figure(figsize=(6,6))
-        ax = fig.add_subplot(111, projection='3d')
-        ax.plot_surface(X, Y, self.ACF_All, cmap=cm.coolwarm,linewidth=0, antialiased=False)
-        plt.show()
+        plot = self.outputFigure.add_subplot(111, projection='3d')
+        plot.plot_surface(X, Y, self.ACF_All, cmap=cm.coolwarm,linewidth=0, antialiased=False)
         
         
     def calcMeanAll(self):
@@ -73,8 +85,8 @@ class Stats:
         step = np.square(x) / self.lenP
         all_time = (self.time[-1] - self.time[0])
         ACFfft_prob = np.mean(step, axis=0) / all_time
-        plt.plot(ACFfft_prob)
-        plt.show()
+        plot = self.outputFigure.add_subplot(111)
+        plot.plot(ACFfft_prob)
     
     def calcAvgPower(self):
         x = []

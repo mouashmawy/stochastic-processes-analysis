@@ -4,55 +4,42 @@ from DEF import *
 class Ensembles:
     def __init__(self):
         
-        self.time = np.genfromtxt('samples/t.csv', delimiter=',')
-        timeLength = len(self.time)
         
-        ## X
+## X
         self.ensembleX = np.genfromtxt('samples/x.csv', delimiter=',')
-        
-        ## Y
-        SAMPLES_NUM = 100
-        Y_mean = 0
-        Y_var = 1
-        self.ensembleY = np.zeros(shape=(SAMPLES_NUM,timeLength))
-        betas = np.array(list(range(SAMPLES_NUM)))
-        
-        for x in range(len(betas)):
-            for t in range(len(self.time)):
-                beta = 1/sqrt(2*pi*Y_var) * pow(e,(-pow(x-Y_mean,2)/(2*Y_var)))
-                if t <=2:    
-                    self.ensembleY[x][t] = beta*sin(2*pi*self.time[t])
-                else:
-                    self.ensembleY[x][t] = 0
-        
-        ## Z
-        self.ensembleZ = self.ensembleX * self.ensembleY
-        
-        ## P
-        self.ensembleP = self.ensembleX * self.ensembleY
-        
-        ## M
-        self.ensembleM = self.ensembleX * self.ensembleY
-        
-        # ## file
-        # if not choiceOrFile in [X_,Y_,Z_,P_,M_]:
-        #     try:
-        #         self.ensembleX = np.genfromtxt(choiceOrFile, delimiter=',')
-        #     except:
-        #         print("file not found")
+        self.timeX = np.genfromtxt('samples/t_x.csv', delimiter=',')
+## Y
+        try:
+            self.ensembleY = np.genfromtxt('samples/y.csv', delimiter=',')
+            self.timeY = np.genfromtxt('samples/t_y.csv', delimiter=',')
+        except:
+            print(55555555555)
+## Z
+        self.ensembleZ = np.genfromtxt('samples/z.csv', delimiter=',')
+        self.timeZ = np.genfromtxt('samples/t_z.csv', delimiter=',')
+## P
+        self.ensembleP = np.genfromtxt('samples/p.csv', delimiter=',')
+        self.timeP = np.genfromtxt('samples/t_p.csv', delimiter=',')
+## M
+        self.ensembleM = np.genfromtxt('samples/m.csv', delimiter=',')
+        self.timeM = np.genfromtxt('samples/t_m.csv', delimiter=',')
                 
 
     def getEnsemble(self, wantEns):
         
         if wantEns == X_:
-            return self.ensembleX, self.time
+            return self.ensembleX, self.timeX
         elif wantEns == Y_:
-            return self.ensembleY, self.time
+            return self.ensembleY, self.timeY
         elif wantEns == Z_:
-            return self.ensembleZ, self.time
+            return self.ensembleZ, self.timeZ
         elif wantEns == P_:
-            return self.ensembleP, self.time
+            return self.ensembleP, self.timeP
         elif wantEns == M_:
-            return self.ensembleM, self.time
+            return self.ensembleM, self.timeM
+        else:
+            pass        
         
+    def generateEnsemble(self, choiceOrFile):
+        pass
         

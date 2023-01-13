@@ -1,6 +1,6 @@
 #Global used Colors for GUI
-BK_CLR = "#000000"
-FG_CLR = "#FFFFFF"
+BK_CLR = "#FFFFFF"
+FG_CLR = "#000000"
 DSBLD_CLR = "#AAAAAA"
 
 #Menu options for Ensembles
@@ -12,5 +12,5 @@ M_ = "Ensemble m"
 Choose_ = "Choose File.."
 
 
-OPTIONS_MENU_LENGTH = 150
-BTN_WIDTH = 15
+OPTIONS_MENU_LENGTH = 200
+BTN_WIDTH = 20
