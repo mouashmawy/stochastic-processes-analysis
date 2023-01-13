@@ -33,15 +33,11 @@ class Stats:
     def plotEnsembleMean(self):
         EnsembleMean = np.mean(self.processes,axis=0)
         plt.plot(self.time,EnsembleMean)
-        print(len(EnsembleMean))
-        print(len(EnsembleMean))
-        print(len(self.time))
         plt.show()
         
     
-    def plotACF(self):
+    def plot3DACF(self):
         
-        print(self.ACF_All)
         x = np.arange(0,self.lenP,1)
         X,Y = np.meshgrid(x,x)
         fig = plt.figure(figsize=(6,6))

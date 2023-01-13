@@ -55,13 +55,13 @@ class GUIApp:
 
         
         self.scaleMLabel.grid(row=0, column=0)
-        self.ScaleM.grid(row=1,column=0)
+        self.scaleM.grid(row=1,column=0)
         self.scaleNLabel.grid(row=0, column=1)
         self.scaleN.grid(row=1,column=1)
         self.scaleILabel.grid(row=2, column=0)
-        self.ScaleI.grid(row=3,column=0)
+        self.scaleI.grid(row=3,column=0)
         self.scaleJLabel.grid(row=2, column=1)
-        self.ScaleJ.grid(row=3,column=1)
+        self.scaleJ.grid(row=3,column=1)
 
         ##########frame 3
         self.frame3 = tk.Frame(self.master,bg=BK_CLR,padx=10,pady=10)
@@ -74,21 +74,21 @@ class GUIApp:
         self.frame4 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=10)
 
         self.plotSampleN_btn = Button(self.frame4, text='Plot Sample N', command=self.plotSampleN, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.PlotMsamples_btn = Button(self.frame4, text='Plot M Samples', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.plotMean_btn = Button(self.frame4, text='Plot Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.plotACF_btn = Button(self.frame4, text='Plot ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.calcTimeMean_btn = Button(self.frame4, text='Calc Time Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.calcTimeACF_btn = Button(self.frame4, text='Calc Time ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.calcAllMean_btn = Button(self.frame4, text='Calc All Mean', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.plot3DACF_btn = Button(self.frame4, text='Plot 3D ACF', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.plotPSD_btn = Button(self.frame4, text='Plot PSD', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
-        self.plotPwrAvg_btn = Button(self.frame4, text='show Avg Pwr', command=self.ps, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.PlotMSamples_btn = Button(self.frame4, text='Plot M Samples', command=self.plotMSamples, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotMean_btn = Button(self.frame4, text='Plot Mean', command=self.plotEnsembleMean, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcACF_btn = Button(self.frame4, text='Calc ACF', command=self.calcEnsembleACF, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcTimeMean_btn = Button(self.frame4, text='Calc Time Mean', command=self.calcTimeMean, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcTimeACF_btn = Button(self.frame4, text='Calc Time ACF', command=self.calcTimeACF, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.calcAllMean_btn = Button(self.frame4, text='Calc All Mean', command=self.calcAllMean, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plot3DACF_btn = Button(self.frame4, text='Plot 3D ACF', command=self.plot3DACF, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotPSD_btn = Button(self.frame4, text='Plot PSD', command=self.plotPSD, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
+        self.plotPwrAvg_btn = Button(self.frame4, text='show Avg Pwr', command=self.calcAvgPower, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
         
         
         self.plotSampleN_btn.grid(row=0,column=0)
-        self.PlotMsamples_btn.grid(row=0,column=1)
+        self.PlotMSamples_btn.grid(row=0,column=1)
         self.plotMean_btn.grid(row=1,column=0)
-        self.plotACF_btn.grid(row=1,column=1)
+        self.calcACF_btn.grid(row=1,column=1)
         self.calcTimeMean_btn.grid(row=2, column=0)
         self.calcTimeACF_btn.grid(row=2, column=1)
         self.calcAllMean_btn.grid(row=3,column=0)
@@ -99,8 +99,8 @@ class GUIApp:
 
         ##########frame 5
         self.frame5 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=0)
-        self.result = Label(self.frame5, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
-        self.result.grid(row=0, column=0)
+        self.resultLabel = Label(self.frame5, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
+        self.resultLabel.grid(row=0, column=0)
 
 
         #frames
@@ -143,34 +143,59 @@ class GUIApp:
         self.validate()
         self.statsApp.plotSampleN(self.scaleN.get())
     
+    def plotMSamples(self):
+        self.validate()
+        self.statsApp.plotMSamples(self.scaleM.get())
+        
+    def plotEnsembleMean(self):
+        self.validate()
+        self.statsApp.plotEnsembleMean()
+        
+    def calcEnsembleACF(self):
+        self.validate()
+        i = self.scaleI.get()
+        j = self.scaleJ.get()
 
+        ACF = self.statsApp.calcACFbetween(i,j)
+        self.resultLabel.config(text=f"Ensemble ACF ({i}&{j}) = {ACF}",font="Arial 12 bold")
+        
+    def calcTimeMean(self):
+        self.validate()
+        n= self.scaleN.get()
+        mean = self.statsApp.calcTimeMeanOf(n)
+        self.resultLabel.config(text=f"Time Mean of Sample #{n} = {mean}",font="Arial 12 bold")
+        
+    def calcTimeACF(self):
+        self.validate()
+        n = self.scaleN.get()
+        tau = abs(self.scaleI.get()- self.scaleJ.get())
+        ACF = self.statsApp.calcTimeACFOf(n,tau)
+        self.resultLabel.config(text=f"Time ACF of n({n}) & tau({tau}) = {ACF}",font="Arial 12 bold")
+        
+    def calcAllMean(self):
+        self.validate()
+        mean = self.statsApp.calcMeanAll()
+        self.resultLabel.config(text=f"Mean of all samples = {mean}",font="Arial 12 bold")
+
+    def plot3DACF(self):
+        self.validate()
+        self.statsApp.plot3DACF()
+        
+        
+    def plotPSD(self):
+        self.validate()
+        self.statsApp.plotPSD()
+        
+    def calcAvgPower(self):
+        self.validate()
+        power = self.statsApp.calcAvgPower()
+        self.resultLabel.config(text=f"Average Power = {power}",font="Arial 12 bold")
+
+        
     def validate(self):
-        try:
-            self.calculating()
-        except:
-            self.processingLabel.config(text=f"FILE NOT FOUND",font="Arial 12 bold")
-            return 1
-
         if self.additionalWindow1 != None:
             self.additionalWindow1.destroy()
-        self.EnsemblesOptions.config(state=tk.DISABLED, disabledbackground=BK_CLR, disabledforeground=DSBLD_CLR)
+        self.EnsemblesOptions.config(state=tk.DISABLED)# , disabledbackground=BK_CLR, disabledforeground=DSBLD_CLR)
         plt.close('all')
 
 
-    def createTable(self, TableFrame, list):
-        table = tk.Frame(TableFrame, bg=BK_CLR, padx=10, pady=10)
-        for i in range(len(list)):
-            for j in range(len(list[0])):
-                e = Entry(table, width=10, bg=BK_CLR,fg=FG_CLR, font=('Arial', 16, 'bold')
-                          ,disabledbackground=BK_CLR,disabledforeground=FG_CLR)
-                e.grid(row=i, column=j)
-                e.insert(tk.END, list[i][j])
-                e.config(state=tk.DISABLED)
-        return table
-    
-    def ps(self):
-        pass
-
-root = tk.Tk()
-GUIApp(root)
-root.mainloop()
