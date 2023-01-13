@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import Button, Label, Entry, Scale, OptionMenu, filedialog
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from DEF import *
 from Stats import Stats
 from Ensembles import Ensembles
@@ -8,9 +10,17 @@ class GUIApp:
     def __init__(self, master):
 
         self.master = master
+
+
         self.master.config(bg=BK_CLR)
+        
+        
         self.master.title('T-Stat App - Text File Statistics ')
         self.master.minsize(500, 400)
+        
+        self.calcFrame = tk.Frame(self.master,bg=BK_CLR, padx=50,pady=20)
+        self.outputFrame = tk.Frame(self.master,bg=BK_CLR, padx=50,pady=20)
+
         
         self.ensemble = None
         self.processes = None
@@ -21,7 +31,7 @@ class GUIApp:
         self.fileNameText = None
         self.highestNumText = None
         ##########frame 1
-        self.frame1 = tk.Frame(self.master,bg=BK_CLR, padx=50,pady=20)
+        self.frame1 = tk.Frame(self.calcFrame,bg=BK_CLR, padx=50,pady=20)
         self.welcome = Label(self.frame1, text="Welcome in SP App", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
         
         self.chooseEnsembleLabel = Label(self.frame1, text="Choose Ensemble", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
@@ -29,7 +39,7 @@ class GUIApp:
         clicked = tk.StringVar()
         clicked.set(X_)
         self.EnsemblesOptions = OptionMenu(self.frame1, clicked, *options, command=self.calculating)
-        self.EnsemblesOptions.config(bg=BK_CLR, fg=FG_CLR, width=30, activebackground=BK_CLR, activeforeground=FG_CLR, font='Arial 11')
+        self.EnsemblesOptions.config(bg=BK_CLR, fg=FG_CLR, width=BTN_WIDTH*2, activebackground=BK_CLR, activeforeground=FG_CLR, font='Arial 11')
         self.space = Label(self.frame1, text="", font='Arial 10 bold', bg=BK_CLR, fg=FG_CLR)
 
         self.welcome.grid(row=0,column=0)
@@ -39,7 +49,7 @@ class GUIApp:
         
 
         ##########frame 2
-        self.frame2 = tk.Frame(self.master,bg=BK_CLR, padx=10,pady=10)
+        self.frame2 = tk.Frame(self.calcFrame,bg=BK_CLR, padx=10,pady=10)
         
         self.scaleMLabel = Label(self.frame2, text="M samples", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
         self.scaleM = Scale(self.frame2, from_=0, to=20, orient="horizontal", bd=0,activebackground=BK_CLR, bg=BK_CLR, fg=FG_CLR,troughcolor=BK_CLR,relief=tk.RAISED, length=OPTIONS_MENU_LENGTH)
@@ -64,14 +74,14 @@ class GUIApp:
         self.scaleJ.grid(row=3,column=1)
 
         ##########frame 3
-        self.frame3 = tk.Frame(self.master,bg=BK_CLR,padx=10,pady=10)
+        self.frame3 = tk.Frame(self.calcFrame,bg=BK_CLR,padx=10,pady=10)
             #self.enterButton = Button(self.frame3, text='ENTER', command=self.calculating,bg=FG_CLR, padx=15, pady=10, borderwidth=4)
         self.processingLabel = Label(self.frame3, text="Enter file name and number...", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
             # self.enterButton.grid(row=0,column=0)
         self.processingLabel.grid(row=1,column=0)
 
         ##########frame 4
-        self.frame4 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=10)
+        self.frame4 = tk.Frame(self.calcFrame, bg=BK_CLR, padx=10, pady=10)
 
         self.plotSampleN_btn = Button(self.frame4, text='Plot Sample N', command=self.plotSampleN, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
         self.PlotMSamples_btn = Button(self.frame4, text='Plot M Samples', command=self.plotMSamples, fg=FG_CLR, bg=BK_CLR, padx=15, pady=10, borderwidth=2, width=BTN_WIDTH)
@@ -98,17 +108,42 @@ class GUIApp:
         
 
         ##########frame 5
-        self.frame5 = tk.Frame(self.master, bg=BK_CLR, padx=10, pady=0)
+        self.frame5 = tk.Frame(self.calcFrame, bg=BK_CLR, padx=10, pady=0)
         self.resultLabel = Label(self.frame5, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
         self.resultLabel.grid(row=0, column=0)
 
 
-        #frames
+        #calc frames
         self.frame1.pack()
         self.frame2.pack()
         self.frame3.pack()
         self.frame4.pack()
         self.frame5.pack()
+        
+        #-------------------------------------------------------------------------
+        #-----------------------------output frame--------------------------------
+        #-------------------------------------------------------------------------
+
+        self.outputWindowLabel = Label(self.outputFrame, text="Results can be found here", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
+        
+        self.outputFigure = Figure(figsize = (5, 5),
+                dpi = 100)
+        self.canvas = FigureCanvasTkAgg(self.outputFigure,
+                                    master = self.outputFrame)
+        self.canvas.draw()
+
+        
+        #output frames
+        self.outputWindowLabel.pack()
+        self.canvas.get_tk_widget().pack()
+
+        
+        #-------------------------------------------------------------------------
+        #-----------------------------window frame--------------------------------
+        #-------------------------------------------------------------------------
+        self.calcFrame.grid(row=0, column=0)
+        self.outputFrame.grid(row=0, column=1)
+        
 
 
     def openDiag(self,choice):
@@ -137,19 +172,33 @@ class GUIApp:
         
         self.processes, self.time = self.ensemble.getEnsemble(choice)
         
-        self.statsApp = Stats(self.processes, self.time)
-
+        self.statsApp = Stats(self.processes, self.time, self.outputFigure)
+    
+    def showCanvas(self):
+        self.canvas = FigureCanvasTkAgg(self.outputFigure,
+                                    master = self.outputFrame)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack()
+        pass
+    
+    
     def plotSampleN(self):
-        self.validate()
+        self.validate(1)
         self.statsApp.plotSampleN(self.scaleN.get())
+        self.showCanvas()
+        
     
     def plotMSamples(self):
-        self.validate()
+        self.validate(1)
         self.statsApp.plotMSamples(self.scaleM.get())
+        self.showCanvas()
+
         
     def plotEnsembleMean(self):
-        self.validate()
+        self.validate(1)
         self.statsApp.plotEnsembleMean()
+        self.showCanvas()
+
         
     def calcEnsembleACF(self):
         self.validate()
@@ -178,13 +227,16 @@ class GUIApp:
         self.resultLabel.config(text=f"Mean of all samples = {mean}",font="Arial 12 bold")
 
     def plot3DACF(self):
-        self.validate()
+        self.validate(1)
         self.statsApp.plot3DACF()
+        self.showCanvas()
+
         
         
     def plotPSD(self):
-        self.validate()
+        self.validate(1)
         self.statsApp.plotPSD()
+        self.showCanvas()
         
     def calcAvgPower(self):
         self.validate()
@@ -192,7 +244,22 @@ class GUIApp:
         self.resultLabel.config(text=f"Average Power = {power}",font="Arial 12 bold")
 
         
-    def validate(self):
+    def validate(self, cond=0):
+        if(cond == 1):
+            self.canvas.get_tk_widget().destroy()
+            self.outputFigure.clear()
+            self.resultLabel.config(text=f"",font="Arial 12 bold")
+        else:
+            self.canvas.get_tk_widget().destroy()
+            self.outputFigure.clear()
+            
+            self.canvas = FigureCanvasTkAgg(self.outputFigure,
+                                        master = self.outputFrame)
+            self.canvas.draw()
+
+            self.canvas.get_tk_widget().pack()
+            
+        
         if self.additionalWindow1 != None:
             self.additionalWindow1.destroy()
         self.EnsemblesOptions.config(state=tk.DISABLED)# , disabledbackground=BK_CLR, disabledforeground=DSBLD_CLR)
