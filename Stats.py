@@ -64,14 +64,15 @@ class Stats:
         
     def plotPSD(self):
         x = []
-        for i in self.processes:
-            ACFfft = fft.fft(i)
-            shift = fft.fftshift(ACFfft)
-            abs = np.abs(shift)
+        for process in self.processes:
+            ACFfft = fft.fft(process)
+            shifted = fft.fftshift(ACFfft)
+            abs = np.abs(shifted)
             x.append(abs)
         
         step = np.square(x) / self.lenP
-        ACFfft_prob = np.mean(step, axis=0) / (self.time[-1] - self.time[0])
+        all_time = (self.time[-1] - self.time[0])
+        ACFfft_prob = np.mean(step, axis=0) / all_time
         plt.plot(ACFfft_prob)
         plt.show()
     
