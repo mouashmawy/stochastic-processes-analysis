@@ -20,7 +20,7 @@ class Stats:
                 self.ACF_All[i][j] = ACF
         
                
-    def PlotMRandSamples(self,m):
+    def plotMSamples(self,m):
         rands = random.sample(range(1, self.lenP), m)
         for i in rands:
             plt.plot(self.time,self.processes[i])
@@ -67,14 +67,22 @@ class Stats:
         return sum(process1*process2)*self.dt
         
     def plotPSD(self):
-        ACFfft = fft.fft2(self.ACF_All)
-        ACFfft_abs = np.abs(ACFfft)
-        ACFfft_sqrd = ACFfft_abs**2
-        print(len(ACFfft_sqrd),len(ACFfft[0]))
-        ACFfft_prob = np.mean(ACFfft_sqrd, axis=0) * self.dt 
+        x = []
+        for i in self.processes:
+            ACFfft = fft.fft(i)
+            shift = fft.fftshift(ACFfft)
+            abs = np.abs(shift)
+            x.append(abs)
+        
+        step = np.square(x) / self.lenP
+        ACFfft_prob = np.mean(step, axis=0) / (self.time[-1] - self.time[0])
         plt.plot(ACFfft_prob)
         plt.show()
     
     def calcAvgPower(self):
-        pass
+        x = []
+        for i in range(self.lenT):
+            value = self.calcACFbetween(i,i)
+            x.append(value)
+        return np.sum(x)
         
