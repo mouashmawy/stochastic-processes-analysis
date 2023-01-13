@@ -18,8 +18,8 @@ class Stats:
         self.dt = self.time[1]-self.time[0]
         self.ACF_All = np.zeros((self.lenP,self.lenP))
 
-        for i in range(self.lenP):
-            for j in range(self.lenP):
+        for i in range(self.lenT):
+            for j in range(self.lenT):
                 ACF = self.calcACFbetween(i,j)
                 self.ACF_All[i][j] = ACF
         
@@ -27,8 +27,12 @@ class Stats:
     def plotMSamples(self,m):
         rands = random.sample(range(1, self.lenP), m)
         
-        row = int(math.sqrt(m))
-        coulmn = math.ceil(math.sqrt(m))
+        
+        row = math.ceil(math.sqrt(m))
+        coulmn = math.floor(math.sqrt(m))
+        
+        if row*coulmn < m:
+            coulmn += 1
         
         for i in range(len(rands)):
             plot = self.outputFigure.add_subplot(row,coulmn,i+1)

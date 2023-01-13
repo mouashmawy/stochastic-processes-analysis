@@ -26,19 +26,20 @@ class GUIApp:
         self.processes = None
         self.time = None
         self.statsApp =None
+        self.clicked = None
 
         self.additionalWindow1 = None
         self.fileNameText = None
         self.highestNumText = None
         ##########frame 1
         self.frame1 = tk.Frame(self.calcFrame,bg=BK_CLR, padx=50,pady=20)
-        self.welcome = Label(self.frame1, text="Welcome in SP App", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
+        self.welcome = Label(self.frame1, text="Welcome in SP App\n", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
         
         self.chooseEnsembleLabel = Label(self.frame1, text="Choose Ensemble", font='Arial 11', bg=BK_CLR, fg=FG_CLR)
         options=[ X_,Y_,Z_,P_,M_,Choose_]
-        clicked = tk.StringVar()
-        clicked.set(X_)
-        self.EnsemblesOptions = OptionMenu(self.frame1, clicked, *options, command=self.calculating)
+        self.clicked = tk.StringVar()
+        self.clicked.set(X_)
+        self.EnsemblesOptions = OptionMenu(self.frame1, self.clicked, *options, command=self.calculating)
         self.EnsemblesOptions.config(bg=BK_CLR, fg=FG_CLR, width=BTN_WIDTH*2, activebackground=BK_CLR, activeforeground=FG_CLR, font='Arial 11')
         self.space = Label(self.frame1, text="", font='Arial 10 bold', bg=BK_CLR, fg=FG_CLR)
 
@@ -109,8 +110,7 @@ class GUIApp:
 
         ##########frame 5
         self.frame5 = tk.Frame(self.calcFrame, bg=BK_CLR, padx=10, pady=0)
-        self.resultLabel = Label(self.frame5, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
-        self.resultLabel.grid(row=0, column=0)
+
 
 
         #calc frames
@@ -124,7 +124,10 @@ class GUIApp:
         #-----------------------------output frame--------------------------------
         #-------------------------------------------------------------------------
 
-        self.outputWindowLabel = Label(self.outputFrame, text="Results can be found here", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
+        self.outputWindowLabel = Label(self.outputFrame, text="Results can be found here\n", font='Arial 20 bold', bg=BK_CLR, fg=FG_CLR)
+        
+        
+        self.resultLabel = Label(self.outputFrame, text="\n", font='Arial 15 bold', bg=BK_CLR, fg="#ff0000")
         
         self.outputFigure = Figure(figsize = (5, 5),
                 dpi = 100)
@@ -135,6 +138,8 @@ class GUIApp:
         
         #output frames
         self.outputWindowLabel.pack()
+        self.resultLabel.pack()
+
         self.canvas.get_tk_widget().pack()
 
         
@@ -171,7 +176,7 @@ class GUIApp:
         self.ensemble  = Ensembles()
         
         self.processes, self.time = self.ensemble.getEnsemble(choice)
-        
+        self.processingLabel.config(text=f"using:: {self.clicked.get()}", fg="#ff0000")
         self.statsApp = Stats(self.processes, self.time, self.outputFigure)
     
     def showCanvas(self):
